@@ -164,4 +164,20 @@ class TestAPIResponses {
 
 		assertTrue(response2.getStatusCodeValue() == 404);
 	}
+
+	@Test
+	@org.junit.jupiter.api.Order(5)
+	@SuppressWarnings({ "null" })
+	void ShouldReturnMinAndMax() throws Exception {
+		ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+						"http://localhost:8080/api/person/minmax-estado-e-genero",
+						HttpMethod.GET,
+						null,
+						new ParameterizedTypeReference<Map<String, Object>>() {});
+
+		Map<String, Object> body = response.getBody();
+
+		assertTrue(body.containsKey("min"));
+		assertTrue(body.containsKey("max"));
+	}
 }
