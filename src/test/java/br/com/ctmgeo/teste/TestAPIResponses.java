@@ -113,4 +113,29 @@ class TestAPIResponses {
 		assertEquals(person1.getSobrenome(), responseBody.getSobrenome());
 		assertEquals(person1.getTitulo(), responseBody.getTitulo());
 	}
+
+	@Test
+	@SuppressWarnings({ "deprecation", "null" })
+	void ShouldEditOnePerson() throws Exception {
+    CreatePersonRequest request1 = new CreatePersonRequest("Feminino","Sra.","Isabela","A.","Pinto","SP","IsabelaAzevedoPinto@dayrep.com",new Date(1946, 11, 30),-23.649462,-46.704023);
+
+    Person person1 = new Person(request1);
+
+    ResponseEntity<Person> response = restTemplate.exchange(
+            "http://localhost:8080/api/person/1",
+            HttpMethod.PUT,
+            null,
+            new ParameterizedTypeReference<Person>() {});
+
+		Person responseBody = response.getBody();
+		assertEquals(person1.getEmail(), responseBody.getEmail());
+		assertEquals(person1.getEstado(), responseBody.getEstado());
+		assertEquals(person1.getGenero(), responseBody.getGenero());
+		assertEquals(person1.getInicialDoMeio(), responseBody.getInicialDoMeio());
+		assertEquals(person1.getLatitude(), responseBody.getLatitude());
+		assertEquals(person1.getLongitude(), responseBody.getLongitude());
+		assertEquals(person1.getNome(), responseBody.getNome());
+		assertEquals(person1.getSobrenome(), responseBody.getSobrenome());
+		assertEquals(person1.getTitulo(), responseBody.getTitulo());
+	}
 }
