@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -182,7 +183,7 @@ class TestAPIResponses {
 	}
 
 	@Test
-	@org.junit.jupiter.api.Order(5)
+	@org.junit.jupiter.api.Order(6)
 	@SuppressWarnings({ "null" })
 	void ShouldReturnMin20AndMax50() throws Exception {
 		ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
@@ -195,5 +196,26 @@ class TestAPIResponses {
 
 		assertTrue(body.containsKey("greaterEquals50"));
 		assertTrue(body.containsKey("lowerEquals20"));
+	}
+
+	@Test
+	@org.junit.jupiter.api.Order(6)
+	@SuppressWarnings({ "null" })
+	void ShouldReturnStateAndGender() throws Exception {
+		ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+			"http://localhost:8080/api/person/numero-por-estado-e-genero",
+			HttpMethod.GET,
+			null,
+			new ParameterizedTypeReference<List<Map<String, Object>>>() {});
+
+		List<Map<String, Object>> body = response.getBody();
+
+		assertFalse(body.isEmpty());
+
+		for (Map<String, Object> item : body) {
+			assertTrue(item.containsKey("state"));
+			assertTrue(item.containsKey("female"));
+			assertTrue(item.containsKey("male"));
+		}
 	}
 }
