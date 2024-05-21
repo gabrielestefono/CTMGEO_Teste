@@ -180,4 +180,20 @@ class TestAPIResponses {
 		assertTrue(body.containsKey("min"));
 		assertTrue(body.containsKey("max"));
 	}
+
+	@Test
+	@org.junit.jupiter.api.Order(5)
+	@SuppressWarnings({ "null" })
+	void ShouldReturnMin20AndMax50() throws Exception {
+		ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+						"http://localhost:8080/api/person/max-20-50",
+						HttpMethod.GET,
+						null,
+						new ParameterizedTypeReference<Map<String, Object>>() {});
+
+		Map<String, Object> body = response.getBody();
+
+		assertTrue(body.containsKey("greaterEquals50"));
+		assertTrue(body.containsKey("lowerEquals20"));
+	}
 }
