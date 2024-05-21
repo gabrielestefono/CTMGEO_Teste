@@ -32,10 +32,11 @@ Elas estão melhor documentadas na rota /swagger-ui/index.html.
 Os testes de integração são uma parte importante deste projeto. Para executá-los, siga os passos abaixo:
 
 1. Certifique-se de que todas as dependências estão instaladas e o projeto foi compilado corretamente com `mvn clean install`.
-2. Para rodar os testes, utilize o comando:
+2. Os testes utilizam o banco de dados e a porta 8080, então é importante que o projeto não esteja rodando durante eles.
+3. Para rodar os testes, utilize o comando:
    ```sh
    mvn test
    ```
-3. Verifique os resultados dos testes no terminal para garantir que tudo está funcionando como esperado.
+4. Verifique os resultados dos testes no terminal para garantir que tudo está funcionando como esperado.
 
 Os testes ajudam a garantir que as funcionalidades da API estão corretas e que futuras alterações não introduzam bugs.
