@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,7 @@ class TestAPIResponses {
 
 	@SuppressWarnings("deprecation")
 	@Test
+	@org.junit.jupiter.api.Order(1)
 	void ShouldReturnAllPersons() throws Exception {
   	CreatePersonRequest request1 = new CreatePersonRequest("female","Mrs.","Isabela","A","Pinto","SP","IsabelaAzevedoPinto@dayrep.com",new Date(1946, 11, 30),-23.649462,-46.704023);
 		CreatePersonRequest request2 = new CreatePersonRequest("female","Ms.","Luana","F","Barros","DF","LuanaFerreiraBarros@rhyta.com",new Date(1990, 1, 2),-15.605035,-47.655667);
@@ -63,9 +63,10 @@ class TestAPIResponses {
 	}
 
 	@Test
+	@org.junit.jupiter.api.Order(2)
 	@SuppressWarnings({ "deprecation", "null" })
 	void ShouldCreateOnePerson() throws Exception {
-			CreatePersonRequest request1 = new CreatePersonRequest("Feminino","Sra.","Isabela","A.","Pinto","SP","IsabelaAzevedoPinto@dayrep.com", new Date(1946, 11, 30),-23.649462,-46.704023);
+		CreatePersonRequest request1 = new CreatePersonRequest("female","Mrs.","Isabela","A","Pinto","SP","IsabelaAzevedoPinto@dayrep.com",new Date(1946, 11, 30),-23.649462,-46.704023);
 
 			Person expectedPerson = new Person(request1);
 
@@ -89,17 +90,17 @@ class TestAPIResponses {
 
 
 	@Test
+	@org.junit.jupiter.api.Order(3)
 	@SuppressWarnings({ "deprecation", "null" })
 	void ShouldReturnOnePerson() throws Exception {
-		CreatePersonRequest request2 = new CreatePersonRequest("female","Ms.","Luana","F","Barros","DF","LuanaFerreiraBarros@rhyta.com",new Date(1990, 1, 2),-15.605035,-47.655667);
+		CreatePersonRequest request1 = new CreatePersonRequest("female","Mrs.","Isabela","A","Pinto","SP","IsabelaAzevedoPinto@dayrep.com",new Date(1946, 11, 30),-23.649462,-46.704023);
 
-    Person person1 = new Person(request2);
+    Person person1 = new Person(request1);
 
-		HttpEntity<CreatePersonRequest> requestEntity = new HttpEntity<>(request2);
     ResponseEntity<Person> response = restTemplate.exchange(
             "http://localhost:8080/api/person/1",
             HttpMethod.GET,
-            requestEntity,
+            null,
             new ParameterizedTypeReference<Person>() {});
 
 		Person responseBody = response.getBody();
@@ -115,16 +116,18 @@ class TestAPIResponses {
 	}
 
 	@Test
+	@org.junit.jupiter.api.Order(4)
 	@SuppressWarnings({ "deprecation", "null" })
 	void ShouldEditOnePerson() throws Exception {
-    CreatePersonRequest request1 = new CreatePersonRequest("Feminino","Sra.","Isabela","A.","Pinto","SP","IsabelaAzevedoPinto@dayrep.com",new Date(1946, 11, 30),-23.649462,-46.704023);
+		CreatePersonRequest request3 = new CreatePersonRequest("male","Mr.","Gabriel","B","Cardoso","GO","GabrielBarbosaCardoso@armyspy.com",new Date(1958, 5, 9),-16.868231,-49.224983);
 
-    Person person1 = new Person(request1);
+    Person person1 = new Person(request3);
 
+		HttpEntity<CreatePersonRequest> requestEntity = new HttpEntity<>(request3);
     ResponseEntity<Person> response = restTemplate.exchange(
-            "http://localhost:8080/api/person/1",
+            "http://localhost:8080/api/person/4",
             HttpMethod.PUT,
-            null,
+            requestEntity,
             new ParameterizedTypeReference<Person>() {});
 
 		Person responseBody = response.getBody();
