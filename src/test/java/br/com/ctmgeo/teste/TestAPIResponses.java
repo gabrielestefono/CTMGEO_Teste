@@ -61,4 +61,29 @@ class TestAPIResponses {
 			assertEquals(expected.getTitulo(), actual.getTitulo());
 		}
 	}
+
+	@Test
+	@SuppressWarnings({ "deprecation", "null" })
+	void ShouldCreateOnePerson() throws Exception {
+			CreatePersonRequest request1 = new CreatePersonRequest("Feminino","Sra.","Isabela","A.","Pinto","SP","IsabelaAzevedoPinto@dayrep.com", new Date(1946, 11, 30),-23.649462,-46.704023);
+
+			Person expectedPerson = new Person(request1);
+
+			HttpEntity<CreatePersonRequest> requestEntity = new HttpEntity<>(request1);
+			ResponseEntity<Person> response = restTemplate.exchange(
+							"http://localhost:8080/api/person",
+							HttpMethod.POST,
+							requestEntity,
+							new ParameterizedTypeReference<Person>() {});
+							Person actualPerson = response.getBody();
+			assertEquals(expectedPerson.getEmail(), actualPerson.getEmail());
+			assertEquals(expectedPerson.getEstado(), actualPerson.getEstado());
+			assertEquals(expectedPerson.getGenero(), actualPerson.getGenero());
+			assertEquals(expectedPerson.getInicialDoMeio(), actualPerson.getInicialDoMeio());
+			assertEquals(expectedPerson.getLatitude(), actualPerson.getLatitude());
+			assertEquals(expectedPerson.getLongitude(), actualPerson.getLongitude());
+			assertEquals(expectedPerson.getNome(), actualPerson.getNome());
+			assertEquals(expectedPerson.getSobrenome(), actualPerson.getSobrenome());
+			assertEquals(expectedPerson.getTitulo(), actualPerson.getTitulo());
+	}
 }
