@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,5 +142,26 @@ class TestAPIResponses {
 		assertEquals(person1.getNome(), responseBody.getNome());
 		assertEquals(person1.getSobrenome(), responseBody.getSobrenome());
 		assertEquals(person1.getTitulo(), responseBody.getTitulo());
+	}
+
+	@Test
+	@org.junit.jupiter.api.Order(4)
+	@SuppressWarnings({ "deprecation" })
+	void ShouldDeleteOnePerson() throws Exception {
+			ResponseEntity<Person> response = restTemplate.exchange(
+							"http://localhost:8080/api/person/5",
+							HttpMethod.DELETE,
+							null,
+							new ParameterizedTypeReference<Person>() {});
+
+		assertTrue(response.getStatusCodeValue() == 200);
+
+		ResponseEntity<Person> response2 = restTemplate.exchange(
+							"http://localhost:8080/api/person/5",
+							HttpMethod.DELETE,
+							null,
+							new ParameterizedTypeReference<Person>() {});
+
+		assertTrue(response2.getStatusCodeValue() == 404);
 	}
 }
