@@ -4,18 +4,22 @@ import java.util.Date;
 
 import javax.naming.ServiceUnavailableException;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.ctmgeo.teste.exceptions.errors.BadRequestException;
 import br.com.ctmgeo.teste.exceptions.errors.ConflictException;
 import br.com.ctmgeo.teste.exceptions.errors.ForbiddenException;
-import br.com.ctmgeo.teste.exceptions.errors.HttpMessageNotReadableCustomException;
 import br.com.ctmgeo.teste.exceptions.errors.InternalServerErrorException;
 import br.com.ctmgeo.teste.exceptions.errors.MethodNotAllowedException;
 import br.com.ctmgeo.teste.exceptions.errors.NotFoundException;
@@ -24,13 +28,8 @@ import br.com.ctmgeo.teste.exceptions.messages.CustomMessage;
 
 @RestControllerAdvice
 @RestController
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
-
-	@ExceptionHandler(HttpMessageNotReadableCustomException.class)
-	public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-			CustomMessage customMessage = new CustomMessage(new Date(), ex.getMessage());
-			return new ResponseEntity<>(customMessage, HttpStatus.BAD_REQUEST);
-	}
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<CustomMessage> badRequestException(BadRequestException ex) {
@@ -84,5 +83,12 @@ public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<CustomMessage> allOtherException(Exception ex) {
 		CustomMessage customMessage = new CustomMessage(new Date(), ex.getMessage());
 		return new ResponseEntity<>(customMessage, HttpStatus.BAD_REQUEST);
+	}
+
+	@Override
+	@SuppressWarnings("null")
+	protected ResponseEntity<Object> handleHttpMessageNotReadable( HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		CustomMessage customMessage = new CustomMessage(new Date(), ex.getMessage());
+    return new ResponseEntity<>(customMessage, HttpStatus.BAD_REQUEST);
 	}
 }
